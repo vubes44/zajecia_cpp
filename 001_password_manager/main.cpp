@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include <vector>
+#include <unordered_map>
 using namespace std;
 
 int main() {
@@ -8,15 +8,16 @@ int main() {
     ifstream wejscie;
     ofstream wyjscie;
     wejscie.open("data.txt");
-    wyjscie.open("wyjscie.txt");
 
-    vector<pair<string, string>> dane;
+    unordered_map<string, string> dane;
     string user, password;
 
     while (wejscie >> user) {
         wejscie >> password;
-        dane.push_back({user, password});
+        dane[user] = password;
     }
+
+	wejscie.close();
 
     // obsługa poleceń
     while (true) {
@@ -28,28 +29,29 @@ int main() {
 
         if (polecenie == "add") {
             cin >> user >> password;
-            dane.push_back({user, password});
+            dane[user] = password;
         }
 
         if (polecenie == "help") {
             cin >> user;
-            cout << password;
+            cout << dane[user] << "\n";
         }
 
         if (polecenie == "delete") {
             cin >> user;
-            if (user == "tak")
-            {
-                dane.erase(dane.end() - 1);
-            }
+			dane.erase(user);
         }
     }
+
+	wyjscie.open("data.txt");
     
     // zapisanie do pliku
     cout << "Zapisuje do pliku...\n";
     for (auto [k, s] : dane) {
-        wyjscie << k << " -> " << s << "\n";
+        wyjscie << k << " " << s << "\n";
     }
+
+	wyjscie.close();
 }
 
 
