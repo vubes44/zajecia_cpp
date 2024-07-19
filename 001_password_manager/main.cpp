@@ -51,3 +51,5 @@ int main() {
         wyjscie << k << " -> " << s << "\n";
     }
 }
+
+
