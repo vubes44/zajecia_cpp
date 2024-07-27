@@ -1,55 +1,80 @@
 #include <iostream>
 #include <fstream>
-#include <vector>
+#include <unordered_map>
 using namespace std;
 
 int main() {
     // wczytanie danych
-    ifstream wejscie;
-    ofstream wyjscie;
-    wejscie.open("data.txt");
-    wyjscie.open("wyjscie.txt");
+    ifstream input;
+    ofstream output;
+    input.open("data.txt");
 
-    vector<pair<string, string>> dane;
+    unordered_map<string, string> data;
     string user, password;
 
-    while (wejscie >> user) {
-        wejscie >> password;
-        dane.push_back({user, password});
+    while (input >> user) {
+        input >> password;
+        data[user] = password;
     }
+
+	input.close();
 
     // obsługa poleceń
     while (true) {
-        string polecenie;
-        cin >> polecenie;
+        string command;
+        cin >> command;
 
-        if (polecenie == "exit")
+        if (command == "exit")
             break;
 
-        if (polecenie == "add") {
+        else if (command == "add") {
             cin >> user >> password;
-            dane.push_back({user, password});
-        }
-
-        if (polecenie == "help") {
-            cin >> user;
-            cout << password;
-        }
-
-        if (polecenie == "delete") {
-            cin >> user;
-            if (user == "tak")
+            if (mp.find(user) = mp.end())
             {
-                dane.erase(dane.end() - 1);
+                data[user] = password;
+            }
+            else
+            {
+                cout << user << " exists";
             }
         }
+
+        else if (command == "help") {
+            cin >> user;
+            if ()
+            cout << data[user] << "\n";
+        }
+
+        else if (command == "delete") {
+            cin >> user;
+			data.erase(user);
+        }
+
+        else if (command == "update")
+        {
+            cin >> user;
+            cin >> password;
+            data[user] = password;
+        }
+        
+        else if (command == "finish")
+        {
+            break;
+        }
+        
+        else
+        {
+            cout << "ERR";
+        }
     }
+
+	output.open("data.txt");
     
     // zapisanie do pliku
-    cout << "Zapisuje do pliku...\n";
-    for (auto [k, s] : dane) {
-        wyjscie << k << " -> " << s << "\n";
+    cout << "Saving in file...\n";
+    for (auto [k, s] : data) {
+        output << k << " " << s << "\n";
     }
+
+	output.close();
 }
-
-
