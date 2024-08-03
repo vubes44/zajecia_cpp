@@ -41,8 +41,10 @@ int main() {
 
         else if (command == "help") {
             cin >> user;
-            if ()
-            cout << data[user] << "\n";
+            if (data[user] != "")
+            {
+                cout << data[user] << "\n";
+            }
         }
 
         else if (command == "delete") {
@@ -54,7 +56,10 @@ int main() {
         {
             cin >> user;
             cin >> password;
-            data[user] = password;
+            if (data[user] != "")
+            {
+                data[user] = password;
+            }
         }
         
         else if (command == "finish")
