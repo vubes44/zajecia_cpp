@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
+#include "encrypt_decrypt.h"
 using namespace std;
 
 int main() {
