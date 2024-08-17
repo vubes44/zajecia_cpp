@@ -4,6 +4,16 @@
 #include "encrypt_decrypt.h"
 using namespace std;
 
+string encrypt(string password, int key) {
+    string encrypted_password = "";
+
+    for (auto c : password) {
+        encrypted_password += char((int(c) - int('!') + key) % 94 + int('!'));
+    }
+
+    return encrypted_password;
+}
+
 int main() {
     // Reading data from file data.txt
     ifstream input;
@@ -62,6 +72,11 @@ int main() {
             else {
                 cout << "[ERROR] " << user << " not found.\n";
             }
+        }
+        else if (command == "encript")
+        {
+            cin >> user;
+            data[user] = encrypt(data[user]);
         }
         else {
             cout << "[ERROR] Unknown command.\n";
