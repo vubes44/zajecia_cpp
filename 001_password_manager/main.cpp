@@ -1,20 +1,29 @@
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
+#include <functional>
 #include "encrypt_decrypt.h"
 using namespace std;
 
-string encrypt(string password, int key) {
-    string encrypted_password = "";
+int main() {
+    std::hash<std::string> hash_fn_str;
+    
+    // Security
+    string ACCESS_PASSWORD;
+    cout << "Please input Access Password: ";
 
-    for (auto c : password) {
-        encrypted_password += char((int(c) - int('!') + key) % 94 + int('!'));
+    while (cin >> ACCESS_PASSWORD) {
+        string hash = to_string(hash_fn_str(ACCESS_PASSWORD));
+        if (hash == "13149121421387636708")
+            break;
+        else
+            cout << "Ups.. Please try again: ";
     }
 
-    return encrypted_password;
-}
+    int SECURITY_KEY;
+    cout << "Please input Security Key: ";
+    cin >> SECURITY_KEY;
 
-int main() {
     // Reading data from file data.txt
     ifstream input;
     ofstream output;
@@ -42,7 +51,7 @@ int main() {
             cin >> user >> password;
 
             if (data.find(user) == data.end()) {
-                data[user] = password;
+                data[user] = encrypt(password, SECURITY_KEY);
             }
             else {
                 cout << "[ERROR] " << user << " already exists.\n";
@@ -52,7 +61,7 @@ int main() {
             cin >> user;
 
             if (data.find(user) != data.end()) {
-                cout << "Password for " << user << " -> " << data[user] << "\n";
+                cout << "Password for " << user << " -> " << decrypt(data[user], SECURITY_KEY) << "\n";
             }
             else {
                 cout << "[ERROR] " << user << " not found.\n";
@@ -67,16 +76,11 @@ int main() {
             cin >> user >> password;
             
             if (data.find(user) != data.end()) {
-                data[user] = password;
+                data[user] = encrypt(password, SECURITY_KEY);
             }
             else {
                 cout << "[ERROR] " << user << " not found.\n";
             }
-        }
-        else if (command == "encript")
-        {
-            cin >> user;
-            data[user] = encrypt(data[user]);
         }
         else {
             cout << "[ERROR] Unknown command.\n";
