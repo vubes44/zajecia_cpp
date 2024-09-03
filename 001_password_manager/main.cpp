@@ -1,29 +1,10 @@
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
-#include <functional>
 #include "encrypt_decrypt.h"
 using namespace std;
 
 int main() {
-    std::hash<std::string> hash_fn_str;
-    
-    // Security
-    string ACCESS_PASSWORD;
-    cout << "Please input Access Password: ";
-
-    while (cin >> ACCESS_PASSWORD) {
-        string hash = to_string(hash_fn_str(ACCESS_PASSWORD));
-        if (hash == "13149121421387636708")
-            break;
-        else
-            cout << "Ups.. Please try again: ";
-    }
-
-    int SECURITY_KEY;
-    cout << "Please input Security Key: ";
-    cin >> SECURITY_KEY;
-
     // Reading data from file data.txt
     ifstream input;
     ofstream output;
@@ -51,17 +32,18 @@ int main() {
             cin >> user >> password;
 
             if (data.find(user) == data.end()) {
-                data[user] = encrypt(password, SECURITY_KEY);
+                data[user] = password;
             }
             else {
                 cout << "[ERROR] " << user << " already exists.\n";
             }
         }
         else if (command == "help") {
+            cout << "User: ";
             cin >> user;
 
             if (data.find(user) != data.end()) {
-                cout << "Password for " << user << " -> " << decrypt(data[user], SECURITY_KEY) << "\n";
+                cout << "Password for " << user << " -> " << data[user] << "\n";
             }
             else {
                 cout << "[ERROR] " << user << " not found.\n";
@@ -76,24 +58,30 @@ int main() {
             cin >> user >> password;
             
             if (data.find(user) != data.end()) {
-                data[user] = encrypt(password, SECURITY_KEY);
+                data[user] = password;
             }
             else {
                 cout << "[ERROR] " << user << " not found.\n";
             }
         }
-        else {
-            cout << "[ERROR] Unknown command.\n";
+        else if (command == "encript") {
+            cin >> user;
+            data[user] = encrypt(data[user], 5); // Assuming a key of 5 for encryption
+            cout << "Encripted!";
+        }
+        else if (command == "decript") {
+            cin >> user;
+            data[user] = decrypt(data[user], 5);
+            cout << "Decripted!";
         }
     }
 
+    // Writing updated data back to file
     output.open("data.txt");
-    
-    // Saving back to file data.txt
-    cout << "Saving in file...\n";
-    for (auto [k, s] : data) {
-        output << k << " " << s << "\n";
+    for (const auto& pair : data) {
+        output << pair.first << " " << pair.second << "\n";
     }
-
     output.close();
+
+    return 0;
 }
