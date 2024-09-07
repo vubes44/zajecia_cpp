@@ -21,6 +21,9 @@ int main() {
     input.close();
 
     // queries
+    cout << "Password manager" << endl << endl;
+    cout << "COMMANDS";
+    cout << "exit, add, help, delete, update, encript, decript" << endl;
     while (true) {
         string command;
         cin >> command;
@@ -38,7 +41,7 @@ int main() {
                 cout << "[ERROR] " << user << " already exists.\n";
             }
         }
-        else if (command == "help") {
+        else if (command == "help") {222
             cout << "User: ";
             cin >> user;
 
